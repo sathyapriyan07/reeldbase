@@ -95,6 +95,11 @@ export const movieApi = {
     return data as Movie | null
   },
 
+  getByTmdbId: async (tmdbId: number): Promise<Movie | null> => {
+    const { data } = await supabase.from('movies').select('*').eq('tmdb_id', tmdbId).maybeSingle()
+    return data as Movie | null
+  },
+
   create: async (movie: Partial<Movie>) => {
     const { data, error } = await supabase.from('movies').insert(movie).select().single()
     if (error) throw error

@@ -64,7 +64,8 @@ export default function AdminTMDBImport() {
     setImporting(`movie-${tmdbId}`)
     try {
       const details = await fetchFromTMDB(`/movie/${tmdbId}?append_to_response=credits,images,videos,external_ids`)
-      const movie = {
+      const existing = await movieApi.getByTmdbId(tmdbId)
+      const movieData = {
         tmdb_id: details.id,
         title: details.title,
         original_title: details.original_title,
@@ -82,7 +83,9 @@ export default function AdminTMDBImport() {
         certification: details.release_dates?.results?.[0]?.release_dates?.[0]?.certification || null,
         imdb_id: details.external_ids?.imdb_id || null,
       }
-      const created = await movieApi.create(movie)
+      const created = existing
+        ? await movieApi.update(existing.id, movieData)
+        : await movieApi.create(movieData)
 
       // Import genres
       if (details.genres?.length) {
