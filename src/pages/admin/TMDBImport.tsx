@@ -159,7 +159,8 @@ export default function AdminTMDBImport() {
     setImporting(`series-${tmdbId}`)
     try {
       const details = await fetchFromTMDB(`/tv/${tmdbId}?append_to_response=credits,images,videos,external_ids`)
-      const series = {
+      const existing = await seriesApi.getByTmdbId(tmdbId)
+      const seriesData = {
         tmdb_id: details.id,
         title: details.name,
         original_title: details.original_name,
@@ -173,8 +174,71 @@ export default function AdminTMDBImport() {
         language: 'tamil' as const,
         status: details.status,
       }
-      await seriesApi.create(series)
-      toast.success(`Imported: ${details.name}`)
+      const created = existing
+        ? await seriesApi.update(existing.id, seriesData)
+        : await seriesApi.create(seriesData)
+
+      // Import genres
+      if (details.genres?.length) {
+        await Promise.all(details.genres.map((g: any) =>
+          genreApi.getOrCreate(g.name).then(genre =>
+            seriesApi.addGenre(created.id, genre.id)
+          )
+        ))
+      }
+
+      // Import cast
+      let castImported = 0
+      if (details.credits?.cast?.length) {
+        await Promise.allSettled(details.credits.cast.map(async (c: any) => {
+          try {
+            const person = await personApi.getOrCreate(c.id, {
+              tmdb_id: c.id,
+              name: c.name,
+              slug: (c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + c.id,
+              profile_url: c.profile_path ? `https://image.tmdb.org/t/p/original${c.profile_path}` : null,
+              role: roleMap[c.known_for_department] || 'actor',
+              known_for_department: c.known_for_department,
+              popularity: c.popularity,
+            })
+            await seriesApi.addCast({
+              series_id: created.id,
+              person_id: person.id,
+              character: c.character || null,
+              order: c.order,
+              role: roleMap[c.known_for_department] || 'actor',
+            })
+            castImported++
+          } catch { /* skip failed cast member */ }
+        }))
+      }
+
+      // Import crew
+      let crewImported = 0
+      if (details.credits?.crew?.length) {
+        await Promise.allSettled(details.credits.crew.map(async (c: any) => {
+          try {
+            const person = await personApi.getOrCreate(c.id, {
+              tmdb_id: c.id,
+              name: c.name,
+              slug: (c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + c.id,
+              profile_url: c.profile_path ? `https://image.tmdb.org/t/p/original${c.profile_path}` : null,
+              role: roleMap[c.department] || 'actor',
+              known_for_department: c.department,
+              popularity: c.popularity,
+            })
+            await seriesApi.addCrew({
+              series_id: created.id,
+              person_id: person.id,
+              department: c.department || 'Production',
+              job: c.job || 'Unknown',
+            })
+            crewImported++
+          } catch { /* skip failed crew member */ }
+        }))
+      }
+
+      toast.success(`Imported: ${details.name} (${(details.genres?.length || 0)} genres, ${castImported} cast, ${crewImported} crew)`)
     } catch (err: any) {
       toast.error(`Import failed: ${err.message}`)
     } finally {

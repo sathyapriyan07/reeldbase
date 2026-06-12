@@ -172,6 +172,11 @@ export const seriesApi = {
     return data as Series | null
   },
 
+  getByTmdbId: async (tmdbId: number): Promise<Series | null> => {
+    const { data } = await supabase.from('series').select('*').eq('tmdb_id', tmdbId).maybeSingle()
+    return data as Series | null
+  },
+
   create: async (series: Partial<Series>) => {
     const { data, error } = await supabase.from('series').insert(series).select().single()
     if (error) throw error
@@ -197,6 +202,23 @@ export const seriesApi = {
   getEpisodes: async (seasonId: string): Promise<Episode[]> => {
     const { data } = await supabase.from('episodes').select('*').eq('season_id', seasonId).order('episode_number')
     return (data || []) as Episode[]
+  },
+
+  addGenre: async (seriesId: string, genreId: string) => {
+    const { error } = await supabase.from('series_genres').upsert({ series_id: seriesId, genre_id: genreId }, { onConflict: 'series_id,genre_id' })
+    if (error) throw error
+  },
+
+  addCast: async (cast: Partial<SeriesCast>) => {
+    const { data, error } = await supabase.from('series_cast').insert(cast).select().single()
+    if (error) throw error
+    return data as SeriesCast
+  },
+
+  addCrew: async (crew: Partial<SeriesCrew>) => {
+    const { data, error } = await supabase.from('series_crew').insert(crew).select().single()
+    if (error) throw error
+    return data as SeriesCrew
   },
 }
 

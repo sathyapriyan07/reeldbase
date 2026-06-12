@@ -54,55 +54,61 @@ export default function SeriesDetail() {
         <meta name="description" content={series.synopsis || `${series.title} series details`} />
       </Helmet>
 
-      <div className="relative h-[40vh] min-h-[300px]">
-        {series.backdrop_url ? (
-          <img src={getImageUrl(series.backdrop_url, 'original') || series.backdrop_url} alt={series.title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-dark-900 to-dark-800" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/60 to-transparent" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-64 flex-shrink-0">
-            {series.poster_url ? (
-              <img src={getImageUrl(series.poster_url, 'w500') || series.poster_url} alt={series.title} className="w-full rounded-xl shadow-2xl" />
-            ) : (
-              <div className="w-full aspect-[2/3] bg-gradient-to-br from-dark-800 to-dark-700 rounded-xl flex items-center justify-center">
-                <span className="text-5xl font-bold text-dark-600 font-display">{series.title[0]}</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <div className="relative aspect-video rounded-2xl overflow-hidden">
+          {(series.backdrop_url || series.poster_url) ? (
+            <>
+              <img
+                src={getImageUrl(series.backdrop_url || series.poster_url!, 'original') || series.backdrop_url || series.poster_url!}
+                alt={series.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 lg:p-10">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="badge-primary">{getLanguageLabel(series.language)}</span>
+                  <span className="badge-secondary">Series</span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{series.title}</h1>
+                {series.tagline && (
+                  <p className="text-sm sm:text-base text-reel-400 italic mb-3">&ldquo;{series.tagline}&rdquo;</p>
+                )}
+                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-dark-300">
+                  {series.first_air_date && (
+                    <span className="flex items-center gap-1.5"><FiCalendar className="w-4 h-4" />{formatDate(series.first_air_date)}</span>
+                  )}
+                  {seasons && (
+                    <span className="flex items-center gap-1.5">{seasons.length} Seasons</span>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-
-          <div className="flex-1 pt-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="badge-primary">{getLanguageLabel(series.language)}</span>
-              <span className="badge-secondary">Series</span>
+            </>
+          ) : (
+            <div className="w-full aspect-video bg-gradient-to-br from-dark-900 to-dark-800 rounded-2xl flex items-center justify-center">
+              <span className="text-8xl font-bold text-dark-600 font-display">{series.title[0]}</span>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display mb-2">{series.title}</h1>
-            {series.tagline && <p className="text-lg text-reel-400 italic mb-4">&ldquo;{series.tagline}&rdquo;</p>}
+          )}
+        </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-dark-300 mb-6">
-              {series.first_air_date && (
-                <span className="flex items-center gap-1.5"><FiCalendar className="w-4 h-4" />{formatDate(series.first_air_date)}</span>
-              )}
-              {seasons && <span className="flex items-center gap-1.5">{seasons.length} Seasons</span>}
+        <div className="mt-6 sm:mt-8">
+          {series.trailer_url && (
+            <a
+              href={series.trailer_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 btn-primary mb-6"
+            >
+              <FiPlay className="w-4 h-4" />
+              Watch Trailer
+            </a>
+          )}
+
+          {series.synopsis && (
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Synopsis</h3>
+              <p className="text-dark-200 leading-relaxed">{series.synopsis}</p>
             </div>
-
-            {series.synopsis && (
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Synopsis</h3>
-                <p className="text-dark-200 leading-relaxed">{series.synopsis}</p>
-              </div>
-            )}
-
-            {series.trailer_url && (
-              <a href={series.trailer_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 btn-primary">
-                <FiPlay className="w-4 h-4" /> Watch Trailer
-              </a>
-            )}
-          </div>
+          )}
         </div>
 
         {seasons && seasons.length > 0 && (
