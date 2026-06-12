@@ -50,6 +50,7 @@ export interface Movie {
   runtime: number | null
   poster_url: string | null
   backdrop_url: string | null
+  logo_url: string | null
   trailer_url: string | null
   language: Language
   budget: number | null
@@ -76,6 +77,7 @@ export interface Series {
   last_air_date: string | null
   poster_url: string | null
   backdrop_url: string | null
+  logo_url: string | null
   trailer_url: string | null
   language: Language
   status: string | null

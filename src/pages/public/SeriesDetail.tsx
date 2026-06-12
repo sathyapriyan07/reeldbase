@@ -69,7 +69,15 @@ export default function SeriesDetail() {
                   <span className="badge-primary">{getLanguageLabel(series.language)}</span>
                   <span className="badge-secondary">Series</span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{series.title}</h1>
+                {series.logo_url ? (
+                  <img
+                    src={getImageUrl(series.logo_url, 'original') || series.logo_url}
+                    alt={series.title}
+                    className="h-8 sm:h-10 lg:h-14 object-contain mb-2"
+                  />
+                ) : (
+                  <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{series.title}</h1>
+                )}
                 {series.tagline && (
                   <p className="text-sm sm:text-base text-reel-400 italic mb-3">&ldquo;{series.tagline}&rdquo;</p>
                 )}

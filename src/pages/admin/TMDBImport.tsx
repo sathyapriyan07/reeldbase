@@ -63,8 +63,9 @@ export default function AdminTMDBImport() {
   const importMovie = async (tmdbId: number) => {
     setImporting(`movie-${tmdbId}`)
     try {
-      const details = await fetchFromTMDB(`/movie/${tmdbId}?append_to_response=credits,images,videos,external_ids`)
+      const details = await fetchFromTMDB(`/movie/${tmdbId}?append_to_response=credits,images,videos,external_ids&include_image_language=en,null`)
       const existing = await movieApi.getByTmdbId(tmdbId)
+      const logoPath = details.images?.logos?.find((l: any) => l.iso_639_1 === 'en')?.file_path || details.images?.logos?.[0]?.file_path
       const movieData = {
         tmdb_id: details.id,
         title: details.title,
@@ -76,6 +77,7 @@ export default function AdminTMDBImport() {
         runtime: details.runtime,
         poster_url: details.poster_path ? `https://image.tmdb.org/t/p/original${details.poster_path}` : null,
         backdrop_url: details.backdrop_path ? `https://image.tmdb.org/t/p/original${details.backdrop_path}` : null,
+        logo_url: logoPath ? `https://image.tmdb.org/t/p/original${logoPath}` : null,
         language: 'tamil' as const,
         budget: details.budget,
         revenue: details.revenue,
@@ -158,8 +160,9 @@ export default function AdminTMDBImport() {
   const importSeries = async (tmdbId: number) => {
     setImporting(`series-${tmdbId}`)
     try {
-      const details = await fetchFromTMDB(`/tv/${tmdbId}?append_to_response=credits,images,videos,external_ids`)
+      const details = await fetchFromTMDB(`/tv/${tmdbId}?append_to_response=credits,images,videos,external_ids&include_image_language=en,null`)
       const existing = await seriesApi.getByTmdbId(tmdbId)
+      const logoPath = details.images?.logos?.find((l: any) => l.iso_639_1 === 'en')?.file_path || details.images?.logos?.[0]?.file_path
       const seriesData = {
         tmdb_id: details.id,
         title: details.name,
@@ -171,6 +174,7 @@ export default function AdminTMDBImport() {
         last_air_date: details.last_air_date,
         poster_url: details.poster_path ? `https://image.tmdb.org/t/p/original${details.poster_path}` : null,
         backdrop_url: details.backdrop_path ? `https://image.tmdb.org/t/p/original${details.backdrop_path}` : null,
+        logo_url: logoPath ? `https://image.tmdb.org/t/p/original${logoPath}` : null,
         language: 'tamil' as const,
         status: details.status,
       }

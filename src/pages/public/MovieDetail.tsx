@@ -42,6 +42,19 @@ export default function MovieDetail() {
     enabled: !!movie?.id,
   })
 
+  const { data: crew } = useQuery({
+    queryKey: ['movie-crew', movie?.id],
+    queryFn: async () => {
+      const { supabase } = await import('@/lib/supabase')
+      const { data: crewData } = await supabase
+        .from('movie_crew')
+        .select('*, people(*)')
+        .eq('movie_id', movie!.id)
+      return (crewData || []) as any[]
+    },
+    enabled: !!movie?.id,
+  })
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -88,8 +101,16 @@ export default function MovieDetail() {
                     <span className="badge-secondary">{movie.certification}</span>
                   )}
                 </div>
-                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{movie.title}</h1>
-                {movie.original_title && movie.original_title !== movie.title && (
+                {movie.logo_url ? (
+                  <img
+                    src={getImageUrl(movie.logo_url, 'original') || movie.logo_url}
+                    alt={movie.title}
+                    className="h-8 sm:h-10 lg:h-14 object-contain mb-2"
+                  />
+                ) : (
+                  <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{movie.title}</h1>
+                )}
+                {!movie.logo_url && movie.original_title && movie.original_title !== movie.title && (
                   <p className="text-sm sm:text-base text-dark-300 mb-2">{movie.original_title}</p>
                 )}
                 {movie.tagline && (
@@ -219,6 +240,46 @@ export default function MovieDetail() {
                   </div>
                 </Link>
               ))}
+            </div>
+          </section>
+        )}
+
+        {crew && crew.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-2xl font-bold font-display mb-6">Crew</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {(() => {
+                const grouped = crew.reduce((acc: Record<string, any[]>, c: any) => {
+                  const dept = c.department || 'Other'
+                  if (!acc[dept]) acc[dept] = []
+                  acc[dept].push(c)
+                  return acc
+                }, {})
+                return Object.entries(grouped).map(([department, members]) => (
+                  <div key={department} className="glass rounded-xl border border-white/5 p-4">
+                    <h3 className="text-sm font-semibold text-reel-400 uppercase tracking-wider mb-3">{department}</h3>
+                    <div className="space-y-2">
+                      {members.map((c: any) => (
+                        <Link key={c.id} to={`/person/${c.people?.slug}`} className="flex items-center gap-3 group">
+                          <div className="w-10 h-10 rounded-full overflow-hidden bg-dark-800 flex-shrink-0">
+                            {c.people?.profile_url ? (
+                              <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <span className="text-sm font-bold text-dark-600">{c.people?.name?.[0]}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium group-hover:text-reel-400 transition-colors line-clamp-1">{c.people?.name}</p>
+                            {c.job && <p className="text-xs text-dark-400 line-clamp-1">{c.job}</p>}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              })()}
             </div>
           </section>
         )}
