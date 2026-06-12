@@ -31,9 +31,7 @@ export default function MovieDetail() {
   const { data: cast } = useQuery({
     queryKey: ['movie-cast', movie?.id],
     queryFn: async () => {
-      const { data } = await movieApi.getById(movie!.id)
-      if (!data) return []
-      const supabase = (await import('@/lib/supabase')).supabase
+      const { supabase } = await import('@/lib/supabase')
       const { data: castData } = await supabase
         .from('movie_cast')
         .select('*, people(*)')
@@ -188,19 +186,19 @@ export default function MovieDetail() {
                 <p className="text-dark-200 leading-relaxed">{primaryReview.technical_aspects}</p>
               </div>
             )}
-            {(primaryReview.pros && primaryReview.pros.length > 0) && (
+            {primaryReview.pros && primaryReview.pros.length > 0 && (
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">Pros</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {primaryReview.pros.map((p, i) => <li key={i} className="text-dark-200 text-sm">{p}</li>)}
+                  {primaryReview.pros.map((p: string, i: number) => <li key={i} className="text-dark-200 text-sm">{p}</li>)}
                 </ul>
               </div>
             )}
-            {(primaryReview.cons && primaryReview.cons.length > 0) && (
+            {primaryReview.cons && primaryReview.cons.length > 0 && (
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-red-400 uppercase tracking-wider mb-2">Cons</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {primaryReview.cons.map((c, i) => <li key={i} className="text-dark-200 text-sm">{c}</li>)}
+                  {primaryReview.cons.map((c: string, i: number) => <li key={i} className="text-dark-200 text-sm">{c}</li>)}
                 </ul>
               </div>
             )}
@@ -238,9 +236,7 @@ export default function MovieDetail() {
           </section>
         )}
 
-        <ContentSection title="Similar Movies">
-          {/* Similar movies would be loaded here */}
-        </ContentSection>
+        <ContentSection title="Similar Movies"></ContentSection>
 
         <div className="h-12" />
       </div>

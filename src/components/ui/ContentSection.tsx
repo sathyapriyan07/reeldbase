@@ -4,7 +4,7 @@ import { FiChevronRight } from 'react-icons/fi'
 interface Props {
   title: string
   viewAllLink?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export default function ContentSection({ title, viewAllLink, children }: Props) {

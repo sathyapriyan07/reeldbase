@@ -163,7 +163,7 @@ export const seriesApi = {
   },
 
   delete: async (id: string) => {
-    const { error } = await supabase.delete().eq('id', id)
+    const { error } = await supabase.from('series').delete().eq('id', id)
     if (error) throw error
   },
 

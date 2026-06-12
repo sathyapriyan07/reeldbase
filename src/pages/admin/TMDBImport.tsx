@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { movieApi, seriesApi, personApi } from '@/lib/api'
+import type { PersonRole } from '@/types'
 import { FiSearch, FiDownload, FiExternalLink, FiCheck } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 
@@ -126,7 +127,7 @@ export default function AdminTMDBImport() {
         death_date: details.deathday,
         birth_place: details.place_of_birth,
         profile_url: details.profile_path ? `https://image.tmdb.org/t/p/original${details.profile_path}` : null,
-        role: roleMap[details.known_for_department] || 'actor',
+        role: (roleMap[details.known_for_department] || 'actor') as PersonRole,
         known_for_department: details.known_for_department,
         also_known_as: details.also_known_as,
         gender: details.gender,
