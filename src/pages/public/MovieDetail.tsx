@@ -247,39 +247,24 @@ export default function MovieDetail() {
         {crew && crew.length > 0 && (
           <section className="mt-12">
             <h2 className="text-2xl font-bold font-display mb-6">Crew</h2>
-            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory scrollbar-thin">
-              {(() => {
-                const grouped = crew.reduce((acc: Record<string, any[]>, c: any) => {
-                  const dept = c.department || 'Other'
-                  if (!acc[dept]) acc[dept] = []
-                  acc[dept].push(c)
-                  return acc
-                }, {})
-                return Object.entries(grouped).map(([department, members]) => (
-                  <div key={department} className="glass rounded-xl border border-white/5 p-4 shrink-0 w-72 sm:w-auto snap-start">
-                    <h3 className="text-sm font-semibold text-reel-400 uppercase tracking-wider mb-3">{department}</h3>
-                    <div className="space-y-2">
-                      {members.map((c: any) => (
-                        <Link key={c.id} to={`/person/${c.people?.slug}`} className="flex items-center gap-3 group">
-                          <div className="w-10 h-10 rounded-full overflow-hidden bg-dark-800 flex-shrink-0">
-                            {c.people?.profile_url ? (
-                              <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center">
-                                <span className="text-sm font-bold text-dark-600">{c.people?.name?.[0]}</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-sm font-medium group-hover:text-reel-400 transition-colors line-clamp-1">{c.people?.name}</p>
-                            {c.job && <p className="text-xs text-dark-400 line-clamp-1">{c.job}</p>}
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
+            <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-x-auto sm:overflow-visible pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory scrollbar-thin">
+              {crew.map((c: any) => (
+                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center shrink-0 w-32 sm:w-auto snap-start">
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    {c.people?.profile_url ? (
+                      <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-dark-800 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-dark-600">{c.people?.name?.[0]}</span>
+                      </div>
+                    )}
                   </div>
-                ))
-              })()}
+                  <div className="p-2">
+                    <p className="text-sm font-medium line-clamp-1">{c.people?.name}</p>
+                    {c.job && <p className="text-xs text-dark-400 line-clamp-1">{c.job}</p>}
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}

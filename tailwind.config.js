@@ -33,8 +33,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Playfair Display', 'Georgia', 'serif'],
+        sans: ['Pliant', 'system-ui', 'sans-serif'],
+        display: ['Pliant', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
