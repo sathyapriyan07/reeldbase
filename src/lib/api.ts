@@ -111,6 +111,23 @@ export const movieApi = {
     const { error } = await supabase.from('movies').delete().eq('id', id)
     if (error) throw error
   },
+
+  addGenre: async (movieId: string, genreId: string) => {
+    const { error } = await supabase.from('movie_genres').upsert({ movie_id: movieId, genre_id: genreId }, { onConflict: 'movie_id,genre_id' })
+    if (error) throw error
+  },
+
+  addCast: async (cast: Partial<MovieCast>) => {
+    const { data, error } = await supabase.from('movie_cast').insert(cast).select().single()
+    if (error) throw error
+    return data as MovieCast
+  },
+
+  addCrew: async (crew: Partial<MovieCrew>) => {
+    const { data, error } = await supabase.from('movie_crew').insert(crew).select().single()
+    if (error) throw error
+    return data as MovieCrew
+  },
 }
 
 // ============== SERIES ==============
@@ -203,6 +220,17 @@ export const personApi = {
     return data as Person | null
   },
 
+  getByTmdbId: async (tmdbId: number): Promise<Person | null> => {
+    const { data } = await supabase.from('people').select('*').eq('tmdb_id', tmdbId).maybeSingle()
+    return data as Person | null
+  },
+
+  getOrCreate: async (tmdbId: number, personData: Partial<Person>): Promise<Person> => {
+    const existing = await personApi.getByTmdbId(tmdbId)
+    if (existing) return existing
+    return personApi.create(personData)
+  },
+
   create: async (person: Partial<Person>) => {
     const { data, error } = await supabase.from('people').insert(person).select().single()
     if (error) throw error
@@ -241,6 +269,19 @@ export const genreApi = {
   list: async (): Promise<Genre[]> => {
     const { data } = await supabase.from('genres').select('*').order('name')
     return (data || []) as Genre[]
+  },
+
+  getByName: async (name: string): Promise<Genre | null> => {
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    const { data } = await supabase.from('genres').select('*').eq('slug', slug).maybeSingle()
+    return data as Genre | null
+  },
+
+  getOrCreate: async (name: string): Promise<Genre> => {
+    const existing = await genreApi.getByName(name)
+    if (existing) return existing
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    return genreApi.create({ name, slug })
   },
 
   create: async (genre: Partial<Genre>) => {
