@@ -73,7 +73,7 @@ export function getRoleBadgeColor(role: string) {
     cinematographer: 'bg-cyan-500/20 text-cyan-400',
     editor: 'bg-red-500/20 text-red-400',
   }
-  return colors[role] || 'bg-dark-800 text-dark-300'
+  return colors[role] || 'bg-white/10 text-white/70'
 }
 
 export function getRoleLabel(role: string) {

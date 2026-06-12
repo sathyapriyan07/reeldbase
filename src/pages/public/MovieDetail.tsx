@@ -1,11 +1,9 @@
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
-import { movieApi, reviewApi, ratingApi, personApi } from '@/lib/api'
-import { getImageUrl, formatDate, formatRuntime, getLanguageLabel, getRoleLabel } from '@/lib/utils'
-import { FiStar, FiClock, FiCalendar, FiPlay, FiExternalLink } from 'react-icons/fi'
-import ContentSection from '@/components/ui/ContentSection'
-import MovieCard from '@/components/ui/MovieCard'
+import { movieApi, reviewApi, ratingApi } from '@/lib/api'
+import { getImageUrl, formatDate, formatRuntime, getLanguageLabel } from '@/lib/utils'
+import { FiStar, FiClock, FiCalendar, FiPlay } from 'react-icons/fi'
 
 export default function MovieDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -58,7 +56,7 @@ export default function MovieDetail() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin w-10 h-10 border-4 border-reel-600 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -93,7 +91,7 @@ export default function MovieDetail() {
                 alt={movie.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 lg:p-10">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="badge-primary">{getLanguageLabel(movie.language)}</span>
@@ -108,15 +106,15 @@ export default function MovieDetail() {
                     className="h-8 sm:h-10 lg:h-14 object-contain mb-2"
                   />
                 ) : (
-                  <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{movie.title}</h1>
+                  <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight mb-2">{movie.title}</h1>
                 )}
                 {(!movie.show_logo || !movie.logo_url) && movie.original_title && movie.original_title !== movie.title && (
-                  <p className="text-sm sm:text-base text-dark-300 mb-2">{movie.original_title}</p>
+                  <p className="text-sm sm:text-base text-white/50 mb-2">{movie.original_title}</p>
                 )}
                 {movie.tagline && (
                   <p className="text-sm sm:text-base text-reel-400 italic mb-3">&ldquo;{movie.tagline}&rdquo;</p>
                 )}
-                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-dark-300">
+                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-white/60">
                   {movie.release_date && (
                     <span className="flex items-center gap-1.5"><FiCalendar className="w-4 h-4" />{formatDate(movie.release_date)}</span>
                   )}
@@ -133,19 +131,19 @@ export default function MovieDetail() {
               </div>
             </>
           ) : (
-            <div className="w-full aspect-video bg-gradient-to-br from-dark-900 to-dark-800 rounded-2xl flex items-center justify-center">
-              <span className="text-8xl font-bold text-dark-600 font-display">{movie.title[0]}</span>
+            <div className="w-full aspect-video bg-gradient-to-br from-apple-900 to-black rounded-2xl flex items-center justify-center">
+              <span className="text-8xl font-bold text-white/10">{movie.title[0]}</span>
             </div>
           )}
         </div>
 
-        <div className="mt-6 sm:mt-8">
+        <div className="mt-6 sm:mt-8 max-w-3xl">
           {movie.trailer_url && (
             <a
               href={movie.trailer_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 btn-primary mb-6"
+              className="inline-flex items-center gap-2 btn-primary mb-6 text-sm"
             >
               <FiPlay className="w-4 h-4" />
               Watch Trailer
@@ -154,89 +152,89 @@ export default function MovieDetail() {
 
           {movie.overview && (
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Overview</h3>
-              <p className="text-dark-200 leading-relaxed">{movie.overview}</p>
+              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Overview</h3>
+              <p className="text-white/80 leading-relaxed text-sm sm:text-base">{movie.overview}</p>
             </div>
           )}
         </div>
 
         {primaryReview && (
-          <section className="mt-12 glass rounded-xl p-6 md:p-8 border border-white/5">
+          <section className="mt-10 glass-card p-6 sm:p-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold font-display">Review</h2>
-              <div className="flex items-center gap-2 bg-reel-600/20 px-3 py-1.5 rounded-lg">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Review</h2>
+              <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
                 <FiStar className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                <span className="text-xl font-bold">{primaryReview.rating}/10</span>
+                <span className="text-lg font-bold">{primaryReview.rating}/10</span>
               </div>
             </div>
-            <h3 className="text-xl font-semibold mb-4">{primaryReview.title}</h3>
+            <h3 className="text-lg sm:text-xl font-semibold mb-4">{primaryReview.title}</h3>
             {primaryReview.introduction && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Introduction</h4>
-                <p className="text-dark-200 leading-relaxed">{primaryReview.introduction}</p>
+              <div className="mb-5">
+                <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Introduction</h4>
+                <p className="text-white/70 leading-relaxed text-sm">{primaryReview.introduction}</p>
               </div>
             )}
             {primaryReview.story && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Story</h4>
-                <p className="text-dark-200 leading-relaxed">{primaryReview.story}</p>
+              <div className="mb-5">
+                <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Story</h4>
+                <p className="text-white/70 leading-relaxed text-sm">{primaryReview.story}</p>
               </div>
             )}
             {primaryReview.performances && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Performances</h4>
-                <p className="text-dark-200 leading-relaxed">{primaryReview.performances}</p>
+              <div className="mb-5">
+                <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Performances</h4>
+                <p className="text-white/70 leading-relaxed text-sm">{primaryReview.performances}</p>
               </div>
             )}
             {primaryReview.technical_aspects && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Technical Aspects</h4>
-                <p className="text-dark-200 leading-relaxed">{primaryReview.technical_aspects}</p>
+              <div className="mb-5">
+                <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Technical Aspects</h4>
+                <p className="text-white/70 leading-relaxed text-sm">{primaryReview.technical_aspects}</p>
               </div>
             )}
             {primaryReview.pros && primaryReview.pros.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">Pros</h4>
+                <h4 className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">Pros</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {primaryReview.pros.map((p: string, i: number) => <li key={i} className="text-dark-200 text-sm">{p}</li>)}
+                  {primaryReview.pros.map((p: string, i: number) => <li key={i} className="text-white/60 text-sm">{p}</li>)}
                 </ul>
               </div>
             )}
             {primaryReview.cons && primaryReview.cons.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-red-400 uppercase tracking-wider mb-2">Cons</h4>
+                <h4 className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-2">Cons</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {primaryReview.cons.map((c: string, i: number) => <li key={i} className="text-dark-200 text-sm">{c}</li>)}
+                  {primaryReview.cons.map((c: string, i: number) => <li key={i} className="text-white/60 text-sm">{c}</li>)}
                 </ul>
               </div>
             )}
             {primaryReview.verdict && (
-              <div className="mt-6 p-4 bg-reel-600/10 rounded-lg border border-reel-600/20">
-                <h4 className="text-sm font-semibold text-reel-400 uppercase tracking-wider mb-1">Verdict</h4>
-                <p className="text-dark-200">{primaryReview.verdict}</p>
+              <div className="mt-5 p-4 bg-reel-500/10 rounded-2xl border border-reel-500/20">
+                <h4 className="text-xs font-semibold text-reel-400 uppercase tracking-wider mb-1">Verdict</h4>
+                <p className="text-white/70 text-sm">{primaryReview.verdict}</p>
               </div>
             )}
           </section>
         )}
 
         {cast && cast.length > 0 && (
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold font-display mb-6">Cast</h2>
-            <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-x-auto sm:overflow-visible pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory scrollbar-thin">
+          <section className="mt-10">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-6">Cast</h2>
+            <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-none -mx-4 px-4 snap-x snap-mandatory">
               {cast.map((c: any) => (
-                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center shrink-0 w-32 sm:w-auto snap-start">
+                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center shrink-0 w-28 sm:w-auto snap-start">
                   <div className="relative aspect-[3/4] overflow-hidden">
                     {c.people?.profile_url ? (
-                      <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     ) : (
-                      <div className="w-full h-full bg-dark-800 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-dark-600">{c.people?.name?.[0]}</span>
+                      <div className="w-full h-full bg-apple-900 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white/20">{c.people?.name?.[0]}</span>
                       </div>
                     )}
                   </div>
-                  <div className="p-2">
+                  <div className="p-2.5">
                     <p className="text-sm font-medium line-clamp-1">{c.people?.name}</p>
-                    {c.character && <p className="text-xs text-dark-400 line-clamp-1">{c.character}</p>}
+                    {c.character && <p className="text-xs text-white/40 line-clamp-1">{c.character}</p>}
                   </div>
                 </Link>
               ))}
@@ -245,31 +243,29 @@ export default function MovieDetail() {
         )}
 
         {crew && crew.length > 0 && (
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold font-display mb-6">Crew</h2>
-            <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-x-auto sm:overflow-visible pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory scrollbar-thin">
+          <section className="mt-10">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-6">Crew</h2>
+            <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-none -mx-4 px-4 snap-x snap-mandatory">
               {crew.map((c: any) => (
-                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center shrink-0 w-32 sm:w-auto snap-start">
+                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center shrink-0 w-28 sm:w-auto snap-start">
                   <div className="relative aspect-[3/4] overflow-hidden">
                     {c.people?.profile_url ? (
-                      <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     ) : (
-                      <div className="w-full h-full bg-dark-800 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-dark-600">{c.people?.name?.[0]}</span>
+                      <div className="w-full h-full bg-apple-900 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white/20">{c.people?.name?.[0]}</span>
                       </div>
                     )}
                   </div>
-                  <div className="p-2">
+                  <div className="p-2.5">
                     <p className="text-sm font-medium line-clamp-1">{c.people?.name}</p>
-                    {c.job && <p className="text-xs text-dark-400 line-clamp-1">{c.job}</p>}
+                    {c.job && <p className="text-xs text-white/40 line-clamp-1">{c.job}</p>}
                   </div>
                 </Link>
               ))}
             </div>
           </section>
         )}
-
-        <ContentSection title="Similar Movies"></ContentSection>
 
         <div className="h-12" />
       </div>

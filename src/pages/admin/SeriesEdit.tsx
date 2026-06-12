@@ -85,14 +85,14 @@ export default function AdminSeriesEdit() {
     <>
       <Helmet><title>{isEditing ? 'Edit Series' : 'New Series'} - ReelDB Admin</title></Helmet>
       <div className="flex items-center gap-4 mb-6">
-        <button onClick={() => navigate('/admin/series')} className="p-2 text-dark-400 hover:text-white"><FiArrowLeft className="w-5 h-5" /></button>
+        <button onClick={() => navigate('/admin/series')} className="p-2 text-white/40 hover:text-white rounded-full hover:bg-white/10"><FiArrowLeft className="w-5 h-5" /></button>
         <div>
-          <h1 className="text-2xl font-bold font-display">{isEditing ? 'Edit Series' : 'New Series'}</h1>
-          <p className="text-dark-400 text-sm mt-1">{isEditing ? `Editing: ${series?.title}` : 'Create a new series entry'}</p>
+          <h1 className="text-2xl font-bold tracking-tight">{isEditing ? 'Edit Series' : 'New Series'}</h1>
+          <p className="text-white/40 text-sm mt-1">{isEditing ? `Editing: ${series?.title}` : 'Create a new series entry'}</p>
         </div>
       </div>
       <form onSubmit={handleSubmit} className="max-w-4xl">
-        <div className="glass rounded-xl border border-white/5 p-6 space-y-6">
+        <div className="glass-card p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1.5">Title *</label>
@@ -139,19 +139,19 @@ export default function AdminSeriesEdit() {
                 </button>
                 {form.logo_url && (
                   <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
-                    <input type="checkbox" checked={form.show_logo} onChange={(e) => setForm({ ...form, show_logo: e.target.checked })} className="w-4 h-4 rounded border-dark-700 bg-dark-800" />
+                    <input type="checkbox" checked={form.show_logo} onChange={(e) => setForm({ ...form, show_logo: e.target.checked })} className="w-4 h-4 rounded border-white/20 bg-white/10" />
                     Show logo instead of title
                   </label>
                 )}
               </div>
               {form.logo_url && (
                 <div className="mt-2">
-                  <img src={form.logo_url} alt="Logo preview" className="h-10 object-contain bg-dark-800 rounded p-1" />
+                  <img src={form.logo_url} alt="Logo preview" className="h-10 object-contain bg-white/10 rounded p-1" />
                 </div>
               )}
             </div>
             <div className="flex items-center gap-3">
-              <input type="checkbox" id="featured" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="w-4 h-4 rounded border-dark-700 bg-dark-800" />
+              <input type="checkbox" id="featured" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="w-4 h-4 rounded border-white/20 bg-white/10" />
               <label htmlFor="featured" className="text-sm font-medium">Featured</label>
             </div>
           </div>

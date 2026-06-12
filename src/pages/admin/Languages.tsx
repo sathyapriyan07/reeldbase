@@ -39,20 +39,20 @@ export default function AdminLanguages() {
   return (
     <>
       <Helmet><title>Languages - ReelDB Admin</title></Helmet>
-      <h1 className="text-2xl font-bold font-display mb-6">Languages</h1>
+      <h1 className="text-2xl font-bold tracking-tight mb-6">Languages</h1>
       <div className="flex gap-2 mb-6">
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Language name..." className="input-field max-w-xs" />
         <input type="text" value={code} onChange={(e) => setCode(e.target.value)} placeholder="Code (e.g. ta)" className="input-field max-w-[100px]" />
         <button onClick={() => name && code && createMutation.mutate()} className="btn-primary flex items-center gap-2 text-sm"><FiPlus className="w-4 h-4" /> Add</button>
       </div>
-      <div className="glass rounded-xl border border-white/5 overflow-hidden max-w-xl">
+      <div className="glass-card overflow-hidden max-w-xl">
         {data?.map((lang: any) => (
-          <div key={lang.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-none">
+          <div key={lang.id} className="flex items-center justify-between p-4 border-b border-white/[0.06] last:border-none">
             <div>
               <span className="font-medium">{lang.name}</span>
-              <span className="text-sm text-dark-400 ml-2">({lang.code})</span>
+              <span className="text-sm text-white/40 ml-2">({lang.code})</span>
             </div>
-            <button onClick={() => deleteMutation.mutate(lang.id)} className="p-2 text-dark-400 hover:text-red-400"><FiTrash2 className="w-4 h-4" /></button>
+            <button onClick={() => deleteMutation.mutate(lang.id)} className="p-2 text-white/40 hover:text-red-400 rounded-full hover:bg-white/10"><FiTrash2 className="w-4 h-4" /></button>
           </div>
         ))}
       </div>

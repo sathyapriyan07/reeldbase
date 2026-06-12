@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { homeApi } from '@/lib/api'
-import { FiPlus, FiTrash2, FiChevronUp, FiChevronDown } from 'react-icons/fi'
+import { FiPlus, FiTrash2 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 
 const sectionTypes = [
@@ -56,23 +56,23 @@ export default function AdminHomeSections() {
       <Helmet><title>Home Sections - ReelDB Admin</title></Helmet>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold font-display">Home Sections</h1>
-          <p className="text-dark-400 text-sm mt-1">Manage homepage layout and ordering</p>
+          <h1 className="text-2xl font-bold tracking-tight">Home Sections</h1>
+          <p className="text-white/40 text-sm mt-1">Manage homepage layout and ordering</p>
         </div>
-        <button onClick={() => createMutation.mutate()} className="btn-primary flex items-center gap-2 text-sm">
+        <button onClick={() => createMutation.mutate()} className="btn-primary flex items-center gap-2 text-sm !px-5 !py-2.5">
           <FiPlus className="w-4 h-4" /> Add Section
         </button>
       </div>
 
       <div className="space-y-3">
         {sections?.map((section, index) => (
-          <div key={section.id} className="glass rounded-xl border border-white/5 p-4">
+          <div key={section.id} className="glass-card p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="text-dark-400 text-sm font-mono">#{index + 1}</div>
+                <div className="text-white/30 text-sm font-mono">#{index + 1}</div>
                 <div>
-                  <h3 className="font-medium">{section.title}</h3>
-                  <p className="text-xs text-dark-400">{sectionTypes.find(t => t.value === section.type)?.label || section.type}</p>
+                  <h3 className="font-medium text-sm">{section.title}</h3>
+                  <p className="text-xs text-white/40">{sectionTypes.find(t => t.value === section.type)?.label || section.type}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -80,7 +80,7 @@ export default function AdminHomeSections() {
                   <input type="checkbox" checked={section.active} onChange={(e) => toggleMutation.mutate({ id: section.id, active: e.target.checked })} className="w-4 h-4" />
                   Active
                 </label>
-                <button onClick={() => { if (confirm('Delete this section?')) deleteMutation.mutate(section.id) }} className="p-2 text-dark-400 hover:text-red-400"><FiTrash2 className="w-4 h-4" /></button>
+                <button onClick={() => { if (confirm('Delete this section?')) deleteMutation.mutate(section.id) }} className="p-2 text-white/40 hover:text-red-400 rounded-full hover:bg-white/10"><FiTrash2 className="w-4 h-4" /></button>
               </div>
             </div>
           </div>

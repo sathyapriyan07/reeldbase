@@ -32,50 +32,50 @@ export default function Signup() {
     <>
       <Helmet><title>Sign Up - ReelDB</title></Helmet>
       <div className="min-h-[80vh] flex items-center justify-center px-4">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-reel-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-lg">R</span>
+            <Link to="/" className="inline-flex items-center gap-2.5 mb-5">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                <span className="text-black font-bold text-lg">R</span>
               </div>
-              <span className="text-2xl font-bold font-display">ReelDB</span>
+              <span className="text-xl font-bold tracking-tight">ReelDB</span>
             </Link>
-            <h1 className="text-2xl font-bold">Create account</h1>
-            <p className="text-dark-400 mt-1">Join the Tamil & Malayalam cinema community</p>
+            <h1 className="text-2xl font-bold tracking-tight">Create account</h1>
+            <p className="text-white/40 mt-1.5 text-sm">Join the Tamil & Malayalam cinema community</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="glass rounded-xl p-6 border border-white/5 space-y-4">
+          <form onSubmit={handleSubmit} className="glass-card p-6 sm:p-8 space-y-5">
             <div>
-              <label className="block text-sm font-medium mb-1.5">Username</label>
+              <label className="block text-sm font-medium mb-2">Username</label>
               <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400" />
-                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="input-field pl-10" placeholder="yourname" required />
+                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="input-field pl-11" placeholder="yourname" required />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">Email</label>
+              <label className="block text-sm font-medium mb-2">Email</label>
               <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400" />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field pl-10" placeholder="you@example.com" required />
+                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field pl-11" placeholder="you@example.com" required />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">Password</label>
+              <label className="block text-sm font-medium mb-2">Password</label>
               <div className="relative">
-                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400" />
-                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} className="input-field pl-10 pr-10" placeholder="••••••••" required minLength={6} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-dark-400">
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} className="input-field pl-11 pr-11" placeholder="••••••••" required minLength={6} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white">
                   {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
-            <button type="submit" disabled={loading} className="btn-primary w-full">
+            <button type="submit" disabled={loading} className="btn-primary w-full text-sm">
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
 
-          <p className="text-center mt-4 text-sm text-dark-400">
-            Already have an account? <Link to="/login" className="text-reel-400 hover:text-reel-300">Sign in</Link>
+          <p className="text-center mt-6 text-sm text-white/40">
+            Already have an account? <Link to="/login" className="text-reel-400 hover:text-reel-300 font-medium">Sign in</Link>
           </p>
         </div>
       </div>

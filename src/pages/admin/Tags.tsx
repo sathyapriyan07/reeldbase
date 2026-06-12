@@ -34,17 +34,17 @@ export default function AdminTags() {
   return (
     <>
       <Helmet><title>Tags - ReelDB Admin</title></Helmet>
-      <h1 className="text-2xl font-bold font-display mb-6">Tags</h1>
+      <h1 className="text-2xl font-bold tracking-tight mb-6">Tags</h1>
       <div className="flex gap-2 mb-6">
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="New tag..." className="input-field max-w-xs" />
         <button onClick={() => name && createMutation.mutate()} className="btn-primary flex items-center gap-2 text-sm"><FiPlus className="w-4 h-4" /> Add</button>
       </div>
-      <div className="glass rounded-xl border border-white/5 overflow-hidden max-w-xl">
+      <div className="glass-card overflow-hidden max-w-xl">
         <div className="flex flex-wrap gap-2 p-4">
           {data?.map((tag) => (
-            <div key={tag.id} className="flex items-center gap-2 bg-dark-800 rounded-lg px-3 py-1.5">
+            <div key={tag.id} className="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-1.5">
               <span className="text-sm">{tag.name}</span>
-              <button onClick={() => deleteMutation.mutate(tag.id)} className="text-dark-400 hover:text-red-400"><FiTrash2 className="w-3 h-3" /></button>
+              <button onClick={() => deleteMutation.mutate(tag.id)} className="text-white/40 hover:text-red-400"><FiTrash2 className="w-3 h-3" /></button>
             </div>
           ))}
         </div>

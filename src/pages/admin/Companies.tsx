@@ -28,7 +28,7 @@ export default function AdminCompanies() {
   return (
     <>
       <Helmet><title>Companies - ReelDB Admin</title></Helmet>
-      <h1 className="text-2xl font-bold font-display mb-6">Companies</h1>
+      <h1 className="text-2xl font-bold tracking-tight mb-6">Companies</h1>
       <div className="flex gap-2 mb-6">
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Company name..." className="input-field max-w-xs" />
         <select value={type} onChange={(e) => setType(e.target.value as any)} className="input-field max-w-[150px]">
@@ -38,14 +38,14 @@ export default function AdminCompanies() {
         </select>
         <button onClick={() => name && createMutation.mutate()} className="btn-primary flex items-center gap-2 text-sm"><FiPlus className="w-4 h-4" /> Add</button>
       </div>
-      <div className="glass rounded-xl border border-white/5 overflow-hidden max-w-xl">
+      <div className="glass-card overflow-hidden max-w-xl">
         {data?.map((company) => (
-          <div key={company.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-none">
+          <div key={company.id} className="flex items-center justify-between p-4 border-b border-white/[0.06] last:border-none">
             <div>
               <span className="font-medium">{company.name}</span>
               <span className="badge-secondary ml-2 text-xs capitalize">{company.type}</span>
             </div>
-            <button onClick={() => deleteMutation.mutate(company.id)} className="p-2 text-dark-400 hover:text-red-400"><FiTrash2 className="w-4 h-4" /></button>
+            <button onClick={() => deleteMutation.mutate(company.id)} className="p-2 text-white/40 hover:text-red-400 rounded-full hover:bg-white/10"><FiTrash2 className="w-4 h-4" /></button>
           </div>
         ))}
       </div>

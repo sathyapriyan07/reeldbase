@@ -56,28 +56,24 @@ export default function Discover() {
         <title>Discover - ReelDB</title>
       </Helmet>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold font-display">Discover</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Discover</h1>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="btn-secondary !py-2 !px-3 flex items-center gap-2 text-sm"
+            className="btn-secondary !py-2 !px-4 flex items-center gap-2 text-sm"
           >
             <FiFilter className="w-4 h-4" />
-            Filters
+            {showFilters ? 'Hide' : 'Filters'}
           </button>
         </div>
 
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 mb-8 overflow-x-auto scrollbar-none -mx-4 px-4">
           {tabs.map((tab) => (
             <button
               key={tab.value}
               onClick={() => updateFilter('type', tab.value)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                type === tab.value
-                  ? 'bg-reel-600 text-white'
-                  : 'bg-dark-800 text-dark-300 hover:text-white'
-              }`}
+              className={type === tab.value ? 'pill-tab-active' : 'pill-tab-inactive'}
             >
               {tab.label}
             </button>
@@ -85,10 +81,10 @@ export default function Discover() {
         </div>
 
         {showFilters && (
-          <div className="glass border border-white/5 rounded-xl p-6 mb-8">
+          <div className="glass-card p-6 mb-8 animate-fade-in">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">Filters</h3>
-              <button onClick={() => setShowFilters(false)} className="text-dark-400 hover:text-white">
+              <h3 className="font-semibold text-sm">Filters</h3>
+              <button onClick={() => setShowFilters(false)} className="text-white/40 hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-all">
                 <FiX className="w-4 h-4" />
               </button>
             </div>
@@ -96,7 +92,7 @@ export default function Discover() {
               {(type === 'movie' || type === 'series') && (
                 <>
                   <div>
-                    <label className="block text-xs text-dark-400 mb-1.5">Language</label>
+                    <label className="block text-xs text-white/50 mb-1.5 font-medium">Language</label>
                     <select
                       value={language}
                       onChange={(e) => updateFilter('language', e.target.value)}
@@ -109,7 +105,7 @@ export default function Discover() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-dark-400 mb-1.5">Genre</label>
+                    <label className="block text-xs text-white/50 mb-1.5 font-medium">Genre</label>
                     <select
                       value={genreFilter}
                       onChange={(e) => updateFilter('genre', e.target.value)}
@@ -122,7 +118,7 @@ export default function Discover() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-dark-400 mb-1.5">Sort By</label>
+                    <label className="block text-xs text-white/50 mb-1.5 font-medium">Sort By</label>
                     <select
                       value={sort}
                       onChange={(e) => updateFilter('sort', e.target.value)}
@@ -141,7 +137,7 @@ export default function Discover() {
         )}
 
         {type === 'movie' && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {movies?.data?.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
@@ -149,7 +145,7 @@ export default function Discover() {
         )}
 
         {type === 'series' && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {series?.data?.map((s) => (
               <SeriesCard key={s.id} series={s} />
             ))}
@@ -157,7 +153,7 @@ export default function Discover() {
         )}
 
         {type === 'people' && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {people?.data?.map((person) => (
               <PersonCard key={person.id} person={person} />
             ))}

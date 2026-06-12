@@ -58,13 +58,13 @@ export default function AdminPersonEdit() {
     <>
       <Helmet><title>{isEditing ? 'Edit Person' : 'New Person'} - ReelDB Admin</title></Helmet>
       <div className="flex items-center gap-4 mb-6">
-        <button onClick={() => navigate('/admin/people')} className="p-2 text-dark-400 hover:text-white"><FiArrowLeft className="w-5 h-5" /></button>
+        <button onClick={() => navigate('/admin/people')} className="p-2 text-white/40 hover:text-white rounded-full hover:bg-white/10"><FiArrowLeft className="w-5 h-5" /></button>
         <div>
-          <h1 className="text-2xl font-bold font-display">{isEditing ? 'Edit Person' : 'New Person'}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{isEditing ? 'Edit Person' : 'New Person'}</h1>
         </div>
       </div>
       <form onSubmit={handleSubmit} className="max-w-4xl">
-        <div className="glass rounded-xl border border-white/5 p-6 space-y-6">
+        <div className="glass-card p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1.5">Name *</label>

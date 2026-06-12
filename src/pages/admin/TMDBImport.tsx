@@ -287,16 +287,16 @@ export default function AdminTMDBImport() {
   return (
     <>
       <Helmet><title>TMDB Import - ReelDB Admin</title></Helmet>
-      <h1 className="text-2xl font-bold font-display mb-2">TMDB Import</h1>
-      <p className="text-dark-400 mb-6">Search and import movies, series, and people from TMDB</p>
+      <h1 className="text-2xl font-bold tracking-tight mb-2">TMDB Import</h1>
+      <p className="text-white/40 mb-6">Search and import movies, series, and people from TMDB</p>
 
-      <div className="glass rounded-xl border border-white/5 p-6 mb-8">
+      <div className="glass-card p-6 mb-8">
         <div className="flex gap-2 mb-4">
           {(['movie', 'tv', 'person'] as SearchType[]).map((type) => (
             <button
               key={type}
               onClick={() => { setSearchType(type); setResults([]); setSearched(false) }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${searchType === type ? 'bg-reel-600 text-white' : 'bg-dark-800 text-dark-300 hover:text-white'}`}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${searchType === type ? 'bg-white text-black' : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'}`}
             >
               {type === 'movie' ? 'Movies' : type === 'tv' ? 'Series' : 'People'}
             </button>
@@ -304,7 +304,7 @@ export default function AdminTMDBImport() {
         </div>
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400" />
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
             <input
               type="text"
               value={query}
@@ -319,25 +319,25 @@ export default function AdminTMDBImport() {
 
       {results.length > 0 && (
         <div className="space-y-3">
-          <p className="text-sm text-dark-400">{results.length} results found</p>
+          <p className="text-sm text-white/40">{results.length} results found</p>
           {results.map((result) => {
             const title = result.title || result.name || ''
             const date = result.release_date || result.first_air_date || ''
             const isImporting = importing === `${searchType}-${result.id}`
 
             return (
-              <div key={result.id} className="glass rounded-xl border border-white/5 p-4 flex items-center gap-4">
-                <div className="w-16 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-dark-800">
+              <div key={result.id} className="glass-card p-4 flex items-center gap-4">
+                <div className="w-16 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-apple-800">
                   {result.poster_path ? (
                     <img src={`https://image.tmdb.org/t/p/w185${result.poster_path}`} alt={title} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center"><span className="text-2xl font-bold text-dark-600">?</span></div>
+                    <div className="w-full h-full flex items-center justify-center"><span className="text-2xl font-bold text-white/20">?</span></div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium">{title}</h3>
-                  {result.overview && <p className="text-sm text-dark-400 line-clamp-2 mt-1">{result.overview}</p>}
-                  <div className="flex items-center gap-3 mt-2 text-xs text-dark-400">
+                  {result.overview && <p className="text-sm text-white/40 line-clamp-2 mt-1">{result.overview}</p>}
+                  <div className="flex items-center gap-3 mt-2 text-xs text-white/40">
                     {date && <span>{date}</span>}
                     <span>TMDB: {result.id}</span>
                     {result.vote_average > 0 && <span>{result.vote_average.toFixed(1)}/10</span>}
@@ -348,7 +348,7 @@ export default function AdminTMDBImport() {
                     href={`https://www.themoviedb.org/${searchType}/${result.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-dark-400 hover:text-white transition-colors"
+                    className="p-2 text-white/40 hover:text-white transition-colors rounded-full hover:bg-white/10"
                   >
                     <FiExternalLink className="w-4 h-4" />
                   </a>
@@ -377,7 +377,7 @@ export default function AdminTMDBImport() {
 
       {searched && results.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-dark-400">No results found. Try a different search term.</p>
+          <p className="text-white/40">No results found. Try a different search term.</p>
         </div>
       )}
     </>

@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { reviewApi, movieApi } from '@/lib/api'
-import { FiEdit2, FiTrash2, FiStar, FiPlus, FiSearch } from 'react-icons/fi'
+import { FiEdit2, FiTrash2, FiStar, FiPlus } from 'react-icons/fi'
 import toast from 'react-hot-toast'
-import { supabase } from '@/lib/supabase'
 
 export default function AdminReviews() {
   const queryClient = useQueryClient()
@@ -46,22 +45,24 @@ export default function AdminReviews() {
     <>
       <Helmet><title>Reviews - ReelDB Admin</title></Helmet>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold font-display">Reviews</h1>
-        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center gap-2 text-sm">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Reviews</h1>
+        </div>
+        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center gap-2 text-sm !px-5 !py-2.5">
           <FiPlus className="w-4 h-4" /> New Review
         </button>
       </div>
 
       {showForm && (
-        <div className="glass rounded-xl border border-white/5 p-6 mb-8 space-y-4">
+        <div className="glass-card p-6 mb-8 space-y-4">
           <h2 className="text-lg font-semibold">Create Review</h2>
           <div>
             <label className="block text-sm font-medium mb-1.5">Search Movie</label>
             <input type="text" value={searchMovie} onChange={(e) => setSearchMovie(e.target.value)} className="input-field" placeholder="Search for a movie..." />
             {movies?.data && movies.data.length > 0 && (
-              <div className="mt-2 glass rounded-lg border border-white/5 max-h-40 overflow-y-auto">
+              <div className="mt-2 glass-card max-h-40 overflow-y-auto">
                 {movies.data.map((m) => (
-                  <button key={m.id} onClick={() => setForm({ ...form, movie_id: m.id })} className={`block w-full text-left px-4 py-2 text-sm hover:bg-dark-800 ${form.movie_id === m.id ? 'bg-reel-600/20 text-reel-400' : ''}`}>
+                  <button key={m.id} onClick={() => setForm({ ...form, movie_id: m.id })} className={`block w-full text-left px-4 py-2 text-sm hover:bg-white/[0.03] ${form.movie_id === m.id ? 'bg-reel-500/20 text-reel-400' : ''}`}>
                     {m.title} ({m.release_date ? new Date(m.release_date).getFullYear() : 'N/A'})
                   </button>
                 ))}
@@ -100,11 +101,11 @@ export default function AdminReviews() {
         </div>
       )}
 
-      <div className="glass rounded-xl border border-white/5 overflow-hidden">
+      <div className="glass-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/5 text-left text-sm text-dark-400">
+              <tr className="border-b border-white/[0.06] text-left text-sm text-white/40">
                 <th className="p-4 font-medium">Title</th>
                 <th className="p-4 font-medium">Rating</th>
                 <th className="p-4 font-medium">Status</th>
@@ -114,7 +115,7 @@ export default function AdminReviews() {
             </thead>
             <tbody>
               {reviews?.map((review: any) => (
-                <tr key={review.id} className="border-b border-white/5 hover:bg-dark-800/50">
+                <tr key={review.id} className="border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors">
                   <td className="p-4 text-sm font-medium">{review.title}</td>
                   <td className="p-4">
                     <span className="flex items-center gap-1 text-sm"><FiStar className="w-3 h-3 text-yellow-400" />{review.rating}/10</span>
@@ -124,7 +125,7 @@ export default function AdminReviews() {
                   </td>
                   <td className="p-4">{review.featured ? <FiStar className="w-4 h-4 text-yellow-400" /> : '—'}</td>
                   <td className="p-4">
-                    <button onClick={() => { if (confirm('Delete this review?')) deleteMutation.mutate(review.id) }} className="p-2 text-dark-400 hover:text-red-400"><FiTrash2 className="w-4 h-4" /></button>
+                    <button onClick={() => { if (confirm('Delete this review?')) deleteMutation.mutate(review.id) }} className="p-2 text-white/40 hover:text-red-400 rounded-full hover:bg-white/10"><FiTrash2 className="w-4 h-4" /></button>
                   </td>
                 </tr>
               ))}

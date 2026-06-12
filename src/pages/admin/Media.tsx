@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { storageApi } from '@/lib/api'
-import { FiUpload, FiTrash2, FiFolder, FiImage } from 'react-icons/fi'
+import { FiUpload, FiTrash2 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -47,15 +47,15 @@ export default function AdminMedia() {
       <Helmet><title>Media - ReelDB Admin</title></Helmet>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold font-display">Media Library</h1>
-          <p className="text-dark-400 text-sm mt-1">Upload and manage images</p>
+          <h1 className="text-2xl font-bold tracking-tight">Media Library</h1>
+          <p className="text-white/40 text-sm mt-1">Upload and manage images</p>
         </div>
         <div>
           <input type="file" ref={fileInputRef} onChange={handleUpload} className="hidden" accept="image/*" />
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="btn-primary flex items-center gap-2 text-sm"
+            className="btn-primary flex items-center gap-2 text-sm !px-5 !py-2.5"
           >
             <FiUpload className="w-4 h-4" />
             {uploading ? 'Uploading...' : 'Upload'}
@@ -63,26 +63,26 @@ export default function AdminMedia() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
         {files?.map((file: any) => (
           <div key={file.name} className="card group">
-            <div className="relative aspect-square overflow-hidden bg-dark-800">
+            <div className="relative aspect-square overflow-hidden bg-apple-900">
               <img
                 src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/media/${file.name}`}
                 alt={file.name}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                 <button
                   onClick={() => handleDelete(file.name)}
-                  className="p-2 bg-red-500/80 rounded-lg text-white hover:bg-red-500 transition-colors"
+                  className="p-2.5 bg-red-500/80 rounded-full text-white hover:bg-red-500 transition-colors"
                 >
                   <FiTrash2 className="w-4 h-4" />
                 </button>
               </div>
             </div>
-            <div className="p-2">
-              <p className="text-xs text-dark-400 truncate">{file.name}</p>
+            <div className="p-2.5">
+              <p className="text-xs text-white/40 truncate">{file.name}</p>
             </div>
           </div>
         ))}

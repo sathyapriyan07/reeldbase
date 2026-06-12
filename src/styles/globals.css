@@ -1,100 +1,237 @@
-@import url('https://fonts.googleapis.com/css2?family=Pliant:wght@300;400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   * {
-    @apply border-dark-800;
+    border-color: #2c2c2e;
   }
 
   body {
-    @apply bg-dark-950 text-white;
-    font-family: 'Pliant', system-ui, sans-serif;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-dark-950;
+    background-color: #000;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-dark-700 rounded-full;
+    background-color: #363639;
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-dark-600;
+    background-color: #48484a;
+  }
+
+  ::selection {
+    background-color: rgba(199, 120, 38, 0.3);
+    color: #fff;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-dark-900/80 backdrop-blur-xl border border-white/5;
+    background-color: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
+    border-bottom-width: 1px;
+    border-color: rgba(255, 255, 255, 0.08);
   }
 
-  .glass-hover {
-    @apply hover:bg-dark-800/80 transition-colors duration-200;
+  .glass-card {
+    background-color: rgba(28, 28, 30, 0.6);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1rem;
   }
 
   .card-gradient {
-    background: linear-gradient(180deg, transparent 0%, rgba(13, 13, 13, 0.9) 100%);
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-reel-400 to-reel-600;
+    background: linear-gradient(to right, #e0a34e, #c77826);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .hero-gradient {
-    background: linear-gradient(90deg, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.7) 50%, transparent 100%);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
   }
 
   .section-title {
-    @apply text-2xl font-bold font-display;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  @media (min-width: 640px) {
+    .section-title {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
   }
 
   .card {
-    @apply rounded-lg overflow-hidden bg-dark-900 border border-dark-800 transition-all duration-300;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: rgba(28, 28, 30, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.5s;
   }
 
   .card:hover {
-    @apply border-reel-700/50 shadow-lg shadow-reel-900/10;
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   .btn-primary {
-    @apply bg-reel-600 hover:bg-reel-700 text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-200;
+    background-color: #fff;
+    color: #000;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.97);
   }
 
   .btn-secondary {
-    @apply bg-dark-800 hover:bg-dark-700 text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-200 border border-dark-700;
+    background-color: rgba(72, 72, 74, 0.8);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(54, 54, 57, 0.8);
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.97);
   }
 
   .btn-ghost {
-    @apply hover:bg-dark-800 text-dark-300 hover:text-white font-medium px-4 py-2 rounded-lg transition-all duration-200;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   .input-field {
-    @apply w-full bg-dark-900 border border-dark-700 rounded-lg px-4 py-2.5 text-white placeholder-dark-500 focus:outline-none focus:border-reel-600 transition-colors;
+    width: 100%;
+    background-color: rgba(28, 28, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 0.875rem 1.25rem;
+    color: #fff;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .input-field::placeholder {
+    color: #8e8e93;
+  }
+
+  .input-field:focus {
+    border-color: rgba(217, 140, 48, 0.5);
+    box-shadow: 0 0 0 1px rgba(217, 140, 48, 0.3);
   }
 
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
   }
 
   .badge-primary {
-    @apply badge bg-reel-600/20 text-reel-400;
+    background-color: rgba(217, 140, 48, 0.15);
+    color: #e0a34e;
+    border: 1px solid rgba(217, 140, 48, 0.2);
   }
 
   .badge-secondary {
-    @apply badge bg-dark-800 text-dark-300;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .nav-link:hover {
+    color: #fff;
+  }
+
+  .pill-tab {
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .pill-tab-active {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .pill-tab-inactive {
+    background-color: rgba(72, 72, 74, 0.5);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .pill-tab-inactive:hover {
+    color: #fff;
+    background-color: rgba(54, 54, 57, 0.5);
   }
 }
 
 @layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

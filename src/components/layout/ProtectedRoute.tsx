@@ -12,8 +12,8 @@ export default function ProtectedRoute({ children, requireAdmin }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dark-950">
-        <div className="animate-spin w-10 h-10 border-4 border-reel-600 border-t-transparent rounded-full" />
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full" />
       </div>
     )
   }
