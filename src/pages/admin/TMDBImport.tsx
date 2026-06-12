@@ -97,49 +97,57 @@ export default function AdminTMDBImport() {
       }
 
       // Import cast
+      let castImported = 0
       if (details.credits?.cast?.length) {
-        await Promise.all(details.credits.cast.map(async (c: any) => {
-          const person = await personApi.getOrCreate(c.id, {
-            tmdb_id: c.id,
-            name: c.name,
-            slug: (c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + c.id,
-            profile_url: c.profile_path ? `https://image.tmdb.org/t/p/original${c.profile_path}` : null,
-            role: roleMap[c.known_for_department] || 'actor',
-            known_for_department: c.known_for_department,
-            popularity: c.popularity,
-          })
-          await movieApi.addCast({
-            movie_id: created.id,
-            person_id: person.id,
-            character: c.character || null,
-            order: c.order,
-            role: roleMap[c.known_for_department] || 'actor',
-          })
+        await Promise.allSettled(details.credits.cast.map(async (c: any) => {
+          try {
+            const person = await personApi.getOrCreate(c.id, {
+              tmdb_id: c.id,
+              name: c.name,
+              slug: (c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + c.id,
+              profile_url: c.profile_path ? `https://image.tmdb.org/t/p/original${c.profile_path}` : null,
+              role: roleMap[c.known_for_department] || 'actor',
+              known_for_department: c.known_for_department,
+              popularity: c.popularity,
+            })
+            await movieApi.addCast({
+              movie_id: created.id,
+              person_id: person.id,
+              character: c.character || null,
+              order: c.order,
+              role: roleMap[c.known_for_department] || 'actor',
+            })
+            castImported++
+          } catch { /* skip failed cast member */ }
         }))
       }
 
       // Import crew
+      let crewImported = 0
       if (details.credits?.crew?.length) {
-        await Promise.all(details.credits.crew.map(async (c: any) => {
-          const person = await personApi.getOrCreate(c.id, {
-            tmdb_id: c.id,
-            name: c.name,
-            slug: (c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + c.id,
-            profile_url: c.profile_path ? `https://image.tmdb.org/t/p/original${c.profile_path}` : null,
-            role: roleMap[c.department] || 'actor',
-            known_for_department: c.department,
-            popularity: c.popularity,
-          })
-          await movieApi.addCrew({
-            movie_id: created.id,
-            person_id: person.id,
-            department: c.department,
-            job: c.job,
-          })
+        await Promise.allSettled(details.credits.crew.map(async (c: any) => {
+          try {
+            const person = await personApi.getOrCreate(c.id, {
+              tmdb_id: c.id,
+              name: c.name,
+              slug: (c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + c.id,
+              profile_url: c.profile_path ? `https://image.tmdb.org/t/p/original${c.profile_path}` : null,
+              role: roleMap[c.department] || 'actor',
+              known_for_department: c.department,
+              popularity: c.popularity,
+            })
+            await movieApi.addCrew({
+              movie_id: created.id,
+              person_id: person.id,
+              department: c.department || 'Production',
+              job: c.job || 'Unknown',
+            })
+            crewImported++
+          } catch { /* skip failed crew member */ }
         }))
       }
 
-      toast.success(`Imported: ${details.title} (${(details.genres?.length || 0)} genres, ${details.credits?.cast?.length || 0} cast, ${details.credits?.crew?.length || 0} crew)`)
+      toast.success(`Imported: ${details.title} (${(details.genres?.length || 0)} genres, ${castImported} cast, ${crewImported} crew)`)
     } catch (err: any) {
       toast.error(`Import failed: ${err.message}`)
     } finally {

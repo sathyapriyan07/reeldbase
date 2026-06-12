@@ -71,85 +71,72 @@ export default function MovieDetail() {
         {movie.poster_url && <meta property="og:image" content={getImageUrl(movie.poster_url, 'w500') || movie.poster_url} />}
       </Helmet>
 
-      <div className="relative h-[50vh] min-h-[400px]">
-        {movie.backdrop_url ? (
-          <img
-            src={getImageUrl(movie.backdrop_url, 'original') || movie.backdrop_url}
-            alt={movie.title}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-dark-900 to-dark-800" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/60 to-transparent" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 relative z-10">
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="w-48 md:w-64 flex-shrink-0">
-            {movie.poster_url ? (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <div className="relative aspect-video rounded-2xl overflow-hidden">
+          {(movie.backdrop_url || movie.poster_url) ? (
+            <>
               <img
-                src={getImageUrl(movie.poster_url, 'w500') || movie.poster_url}
+                src={getImageUrl(movie.backdrop_url || movie.poster_url!, 'original') || movie.backdrop_url || movie.poster_url!}
                 alt={movie.title}
-                className="w-full rounded-xl shadow-2xl"
+                className="w-full h-full object-cover"
               />
-            ) : (
-              <div className="w-full aspect-[2/3] bg-gradient-to-br from-dark-800 to-dark-700 rounded-xl flex items-center justify-center">
-                <span className="text-6xl font-bold text-dark-600 font-display">{movie.title[0]}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 lg:p-10">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="badge-primary">{getLanguageLabel(movie.language)}</span>
+                  {movie.certification && (
+                    <span className="badge-secondary">{movie.certification}</span>
+                  )}
+                </div>
+                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{movie.title}</h1>
+                {movie.original_title && movie.original_title !== movie.title && (
+                  <p className="text-sm sm:text-base text-dark-300 mb-2">{movie.original_title}</p>
+                )}
+                {movie.tagline && (
+                  <p className="text-sm sm:text-base text-reel-400 italic mb-3">&ldquo;{movie.tagline}&rdquo;</p>
+                )}
+                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-dark-300">
+                  {movie.release_date && (
+                    <span className="flex items-center gap-1.5"><FiCalendar className="w-4 h-4" />{formatDate(movie.release_date)}</span>
+                  )}
+                  {movie.runtime && (
+                    <span className="flex items-center gap-1.5"><FiClock className="w-4 h-4" />{formatRuntime(movie.runtime)}</span>
+                  )}
+                  {avgRating && avgRating.count > 0 && (
+                    <span className="flex items-center gap-1.5 text-yellow-400">
+                      <FiStar className="w-4 h-4 fill-yellow-400" />
+                      {avgRating.average} ({avgRating.count} ratings)
+                    </span>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-
-          <div className="flex-1 pt-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="badge-primary">{getLanguageLabel(movie.language)}</span>
-              {movie.certification && (
-                <span className="badge-secondary">{movie.certification}</span>
-              )}
+            </>
+          ) : (
+            <div className="w-full aspect-video bg-gradient-to-br from-dark-900 to-dark-800 rounded-2xl flex items-center justify-center">
+              <span className="text-8xl font-bold text-dark-600 font-display">{movie.title[0]}</span>
             </div>
+          )}
+        </div>
 
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display mb-2">{movie.title}</h1>
-            {movie.original_title && movie.original_title !== movie.title && (
-              <p className="text-lg text-dark-400 mb-4">{movie.original_title}</p>
-            )}
-            {movie.tagline && (
-              <p className="text-lg text-reel-400 italic mb-4">&ldquo;{movie.tagline}&rdquo;</p>
-            )}
+        <div className="mt-6 sm:mt-8">
+          {movie.trailer_url && (
+            <a
+              href={movie.trailer_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 btn-primary mb-6"
+            >
+              <FiPlay className="w-4 h-4" />
+              Watch Trailer
+            </a>
+          )}
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-dark-300 mb-6">
-              {movie.release_date && (
-                <span className="flex items-center gap-1.5"><FiCalendar className="w-4 h-4" />{formatDate(movie.release_date)}</span>
-              )}
-              {movie.runtime && (
-                <span className="flex items-center gap-1.5"><FiClock className="w-4 h-4" />{formatRuntime(movie.runtime)}</span>
-              )}
-              {avgRating && avgRating.count > 0 && (
-                <span className="flex items-center gap-1.5 text-yellow-400">
-                  <FiStar className="w-4 h-4 fill-yellow-400" />
-                  {avgRating.average} ({avgRating.count} ratings)
-                </span>
-              )}
+          {movie.overview && (
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Overview</h3>
+              <p className="text-dark-200 leading-relaxed">{movie.overview}</p>
             </div>
-
-            {movie.overview && (
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-2">Overview</h3>
-                <p className="text-dark-200 leading-relaxed">{movie.overview}</p>
-              </div>
-            )}
-
-            {movie.trailer_url && (
-              <a
-                href={movie.trailer_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 btn-primary"
-              >
-                <FiPlay className="w-4 h-4" />
-                Watch Trailer
-              </a>
-            )}
-          </div>
+          )}
         </div>
 
         {primaryReview && (
