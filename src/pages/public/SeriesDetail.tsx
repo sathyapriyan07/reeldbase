@@ -69,7 +69,7 @@ export default function SeriesDetail() {
                   <span className="badge-primary">{getLanguageLabel(series.language)}</span>
                   <span className="badge-secondary">Series</span>
                 </div>
-                {series.logo_url ? (
+                {series.show_logo && series.logo_url ? (
                   <img
                     src={getImageUrl(series.logo_url, 'original') || series.logo_url}
                     alt={series.title}

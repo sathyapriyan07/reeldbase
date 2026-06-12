@@ -101,7 +101,7 @@ export default function MovieDetail() {
                     <span className="badge-secondary">{movie.certification}</span>
                   )}
                 </div>
-                {movie.logo_url ? (
+                {movie.show_logo && movie.logo_url ? (
                   <img
                     src={getImageUrl(movie.logo_url, 'original') || movie.logo_url}
                     alt={movie.title}
@@ -110,7 +110,7 @@ export default function MovieDetail() {
                 ) : (
                   <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-display mb-2">{movie.title}</h1>
                 )}
-                {!movie.logo_url && movie.original_title && movie.original_title !== movie.title && (
+                {(!movie.show_logo || !movie.logo_url) && movie.original_title && movie.original_title !== movie.title && (
                   <p className="text-sm sm:text-base text-dark-300 mb-2">{movie.original_title}</p>
                 )}
                 {movie.tagline && (
@@ -222,9 +222,9 @@ export default function MovieDetail() {
         {cast && cast.length > 0 && (
           <section className="mt-12">
             <h2 className="text-2xl font-bold font-display mb-6">Cast</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-x-auto sm:overflow-visible pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory scrollbar-thin">
               {cast.map((c: any) => (
-                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center">
+                <Link key={c.id} to={`/person/${c.people?.slug}`} className="card group text-center shrink-0 w-32 sm:w-auto snap-start">
                   <div className="relative aspect-[3/4] overflow-hidden">
                     {c.people?.profile_url ? (
                       <img src={getImageUrl(c.people.profile_url, 'w185') || c.people.profile_url} alt={c.people.name} className="w-full h-full object-cover" />
@@ -247,7 +247,7 @@ export default function MovieDetail() {
         {crew && crew.length > 0 && (
           <section className="mt-12">
             <h2 className="text-2xl font-bold font-display mb-6">Crew</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory scrollbar-thin">
               {(() => {
                 const grouped = crew.reduce((acc: Record<string, any[]>, c: any) => {
                   const dept = c.department || 'Other'
@@ -256,7 +256,7 @@ export default function MovieDetail() {
                   return acc
                 }, {})
                 return Object.entries(grouped).map(([department, members]) => (
-                  <div key={department} className="glass rounded-xl border border-white/5 p-4">
+                  <div key={department} className="glass rounded-xl border border-white/5 p-4 shrink-0 w-72 sm:w-auto snap-start">
                     <h3 className="text-sm font-semibold text-reel-400 uppercase tracking-wider mb-3">{department}</h3>
                     <div className="space-y-2">
                       {members.map((c: any) => (

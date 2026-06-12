@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
-import { movieApi, genreApi, companyApi } from '@/lib/api'
+import { movieApi, genreApi, companyApi, storageApi } from '@/lib/api'
 import { generateSlug } from '@/lib/utils'
-import { FiSave, FiArrowLeft, FiPlus, FiX } from 'react-icons/fi'
+import { FiSave, FiArrowLeft, FiPlus, FiX, FiUpload } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 
 export default function AdminMovieEdit() {
@@ -12,10 +12,13 @@ export default function AdminMovieEdit() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const isEditing = !!id
+  const logoInputRef = useRef<HTMLInputElement>(null)
+  const [logoUploading, setLogoUploading] = useState(false)
 
   const [form, setForm] = useState({
     title: '', original_title: '', slug: '', tagline: '', overview: '',
     release_date: '', runtime: 0, poster_url: '', backdrop_url: '',
+    logo_url: '', show_logo: false,
     trailer_url: '', language: 'tamil', budget: 0, revenue: 0,
     status: 'Released', certification: '', imdb_id: '', featured: false,
   })
@@ -40,6 +43,8 @@ export default function AdminMovieEdit() {
         runtime: movie.runtime || 0,
         poster_url: movie.poster_url || '',
         backdrop_url: movie.backdrop_url || '',
+        logo_url: movie.logo_url || '',
+        show_logo: movie.show_logo || false,
         trailer_url: movie.trailer_url || '',
         language: movie.language || 'tamil',
         budget: movie.budget || 0,
@@ -64,6 +69,23 @@ export default function AdminMovieEdit() {
     },
     onError: (err: any) => toast.error(err.message),
   })
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setLogoUploading(true)
+    try {
+      const path = `logos/${Date.now()}_${file.name}`
+      const { url } = await storageApi.upload('media', path, file)
+      setForm(prev => ({ ...prev, logo_url: url, show_logo: true }))
+      toast.success('Logo uploaded')
+    } catch (err: any) {
+      toast.error(err.message)
+    } finally {
+      setLogoUploading(false)
+      if (logoInputRef.current) logoInputRef.current.value = ''
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -156,6 +178,28 @@ export default function AdminMovieEdit() {
             <div>
               <label className="block text-sm font-medium mb-1.5">Backdrop URL</label>
               <input type="url" value={form.backdrop_url} onChange={(e) => updateField('backdrop_url', e.target.value)} className="input-field" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1.5">Title Logo</label>
+              <div className="flex flex-wrap items-center gap-3">
+                <input type="url" value={form.logo_url} onChange={(e) => updateField('logo_url', e.target.value)} className="input-field flex-1 min-w-[200px]" placeholder="Logo URL or upload a file" />
+                <input ref={logoInputRef} type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                <button type="button" onClick={() => logoInputRef.current?.click()} disabled={logoUploading} className="btn-secondary flex items-center gap-2 text-sm">
+                  <FiUpload className="w-4 h-4" />
+                  {logoUploading ? 'Uploading...' : 'Upload'}
+                </button>
+                {form.logo_url && (
+                  <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <input type="checkbox" checked={form.show_logo} onChange={(e) => updateField('show_logo', e.target.checked)} className="w-4 h-4 rounded border-dark-700 bg-dark-800" />
+                    Show logo instead of title
+                  </label>
+                )}
+              </div>
+              {form.logo_url && (
+                <div className="mt-2">
+                  <img src={form.logo_url} alt="Logo preview" className="h-10 object-contain bg-dark-800 rounded p-1" />
+                </div>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Trailer URL</label>
